@@ -16,8 +16,8 @@ en_habitacion(roja, h1).
 en_habitacion(verde, h1).
 
 :- dynamic(valor/2).
+valor(verde, 2).
 valor(azul, 1).
-valor(verde, 1).
 valor(roja, -1).
 
 % Definición de las puertas entre habitaciones
@@ -100,7 +100,7 @@ mover_cajas_ordenadas([Caja-_|Resto]) :- % Mover la primera caja y luego las res
     mover_caja_a_habitacion2(Caja), % Mover la caja a la Habitación 2
     eliminar_caja(Caja, Resto, RestoSinCaja), % Eliminar la caja movida de la lista de cajas restantes
     ubicacion_inicial(HabitacionRobot), % Obtener la ubicación actual del robot
-    mover(Robot, h2, h1), % Devolver al robot a la habitación donde están las siguientes cajas
+    mover(Robot, HabitacionRobot, h1), % Devolver al robot a la habitación donde están las siguientes cajas
     mover_cajas_ordenadas(RestoSinCaja). % Mover las cajas restantes
 
 
