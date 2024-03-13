@@ -41,7 +41,5 @@ agarrar(Robot, Caja) :-
 % Regla para que el robot suelte una caja
 soltar(Robot, Caja) :-
     ubicacion_inicial(Habitacion),  % Obtener la ubicación actual del robot
-    en_habitacion(Caja, Habitacion),  % Verificar si el robot tiene la caja consigo
-    retract(en_habitacion(Caja, Habitacion)),  % Retirar el hecho de que el robot tiene la caja consigo
     asserta(en_habitacion(Caja, Habitacion)),  % Afirmar que la caja está en la habitación actual
     write('El robot ha soltado la caja '), write(Caja), nl.  % Imprimir un mensaje de soltar
