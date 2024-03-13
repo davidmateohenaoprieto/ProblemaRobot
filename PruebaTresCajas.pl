@@ -38,15 +38,17 @@ mover(Robot, Desde, Hacia) :-
 agarrar(Robot, Caja) :-
     ubicacion_inicial(Habitacion),  % Obtener la ubicación actual del robot
     en_habitacion(Caja, Habitacion),  % Verificar si la caja está en la misma habitación que el robot
-    valor(Caja, 1),  % Verificar si la caja tiene valor igual a 1
+    valor(Caja, Valor),  % Verificar si la caja tiene valor igual a 1
+    Valor > 0,
     retract(en_habitacion(Caja, Habitacion)),  % Retirar el hecho de que la caja está en la habitación actual
     write('El robot ha agarrado la caja '), write(Caja), nl.  % Imprimir un mensaje de agarrar
+
 
 % Regla para que el robot suelte una caja
 soltar(Robot, Caja) :-
     ubicacion_inicial(Habitacion),  % Obtener la ubicación actual del robot
     asserta(en_habitacion(Caja, Habitacion)),  % Afirmar que la caja está en la habitación actual
-    retract(valor(Caja, 1)),
+    retract(valor(Caja, Valor)),
     asserta(valor(Caja,0)),  % Afirmar que el robot está en la habitación a la que se ha movido
     write('El robot ha soltado la caja '), write(Caja), nl.  % Imprimir un mensaje de soltar
 
@@ -98,7 +100,7 @@ mover_cajas_ordenadas([Caja-_|Resto]) :- % Mover la primera caja y luego las res
     mover_caja_a_habitacion2(Caja), % Mover la caja a la Habitación 2
     eliminar_caja(Caja, Resto, RestoSinCaja), % Eliminar la caja movida de la lista de cajas restantes
     ubicacion_inicial(HabitacionRobot), % Obtener la ubicación actual del robot
-    mover(Robot, h2, HabitacionRobot), % Devolver al robot a la habitación donde están las siguientes cajas
+    mover(Robot, h2, h1), % Devolver al robot a la habitación donde están las siguientes cajas
     mover_cajas_ordenadas(RestoSinCaja). % Mover las cajas restantes
 
 
@@ -111,7 +113,7 @@ eliminar_caja(Caja, [OtraCaja-_|Resto], [OtraCaja-_|RestoSinCaja]) :- % Mantener
     eliminar_caja(Caja, Resto, RestoSinCaja).
 
 resolver :-
-    % listar_ordenado,  % Listar las cajas ordenadas por valor
+    listar_ordenado,  % Listar las cajas ordenadas por valor
     findall(Caja-_, (en_habitacion(Caja, h1), valor(Caja, Valor), Valor > 0), CajasPositivas), % Recolectar cajas positivas
     mover_cajas_ordenadas(CajasPositivas), % Mover las cajas ordenadas a la habitación 2
     !. % Cortar para evitar backtracking y finalizar el proceso
