@@ -96,7 +96,9 @@ mover_caja_a_habitacion2(Caja) :-
 mover_caja_a_habitacion2(_). % Regla para evitar backtracking si no hay caja que mover
 
 
-mover_cajas_ordenadas([]). % Caso base: no quedan cajas por mover
+mover_cajas_ordenadas([]) :- % Caso base: no quedan cajas por mover
+    ubicacion_inicial(HabitacionRobot),
+    mover(Robot, HabitacionRobot, h1).
 mover_cajas_ordenadas([Caja-_|Resto]) :- % Mover la primera caja y luego las restantes
     mover_caja_a_habitacion2(Caja), % Mover la caja a la Habitación 2
     eliminar_caja(Caja, Resto, RestoSinCaja), % Eliminar la caja movida de la lista de cajas restantes
