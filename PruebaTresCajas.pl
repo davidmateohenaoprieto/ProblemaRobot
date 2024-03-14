@@ -17,8 +17,8 @@ en_habitacion(verde, h1).
 
 :- dynamic(valor/2).
 valor(verde, 2).
-valor(azul, 1).
 valor(roja, -1).
+valor(azul, 1).
 
 % Definición de las puertas entre habitaciones
 puerta_abierta(h1, h2).
@@ -67,11 +67,12 @@ listar_cajas_en_habitacion(Habitacion) :-
 
 listar_cajas_en_habitacion(_). % Regla base para terminar la recursión
 
-listar_ordenado :-
+listar_ordenado_para_resolver(CajasOrdenadas) :-
     ubicacion_inicial(Habitacion),  % Obtener la ubicación actual del robot
     findall(Caja-Valor, (en_habitacion(Caja, Habitacion), valor(Caja, Valor), Valor > 0), CajasPositivas), % Recolectar cajas positivas
     sort(2, @>=, CajasPositivas, CajasOrdenadas), % Ordenar las cajas positivas de mayor a menor según su valor
     imprimir_cajas_ordenadas(CajasOrdenadas). % Imprimir las cajas ordenadas
+
 
 
 % Regla para imprimir las cajas ordenadas
@@ -113,7 +114,6 @@ eliminar_caja(Caja, [OtraCaja-_|Resto], [OtraCaja-_|RestoSinCaja]) :- % Mantener
     eliminar_caja(Caja, Resto, RestoSinCaja).
 
 resolver :-
-    listar_ordenado,  % Listar las cajas ordenadas por valor
-    findall(Caja-_, (en_habitacion(Caja, h1), valor(Caja, Valor), Valor > 0), CajasPositivas), % Recolectar cajas positivas
-    mover_cajas_ordenadas(CajasPositivas), % Mover las cajas ordenadas a la habitación 2
+    listar_ordenado_para_resolver(CajasOrdenadas),  % Generar lista de cajas ordenadas por valor
+    mover_cajas_ordenadas(CajasOrdenadas), % Mover las cajas ordenadas a la habitación 2
     !. % Cortar para evitar backtracking y finalizar el proceso
